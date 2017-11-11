@@ -30,7 +30,7 @@ public class ProdutoBean {
 		return this.produto;
 	}
 	
-	public void grava(){
+	public String grava(){
 		ProdutoDao dao = new ProdutoDao();
 		
 		if(produto.getId() == null){
@@ -40,6 +40,8 @@ public class ProdutoBean {
 		}
 		produtos = dao.listaTodos();
 		this.produto = new Produto();
+		
+		return "produto?faces-redirect=true";
 		
 	}
 	

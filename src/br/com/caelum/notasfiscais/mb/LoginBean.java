@@ -1,4 +1,4 @@
-package br.com.caelum.nostasfiscais.mb;
+package br.com.caelum.notasfiscais.mb;
 
 import javax.faces.bean.ManagedBean;
 

@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.caelum.notasfiscais.modelo.Usuario;
-import br.com.caelum.notasfiscais.util.JPAUtil;
 
 public class UsuarioDao implements Serializable {
 
@@ -15,9 +14,8 @@ public class UsuarioDao implements Serializable {
 	@Inject
 	private EntityManager manager;
 	
-	public boolean existe(Usuario usuario) {	
-		
-		
+	public boolean existe(Usuario usuario) {		
+		manager.getTransaction().begin();
 		Query query = manager.createQuery("select u from Usuario u where u.login = :pLogin and u.senha = :pSenha")
 						.setParameter("pLogin", usuario.getLogin())
 						.setParameter("pSenha", usuario.getSenha());
@@ -27,13 +25,12 @@ public class UsuarioDao implements Serializable {
 		return encontrado;
 	}
 	
-	public void adiciona(Usuario usuario){
-		manager.getTransaction().begin();
+	public void adiciona(Usuario usuario){		
 
 		//persiste o objeto
-		manager.persist(usuario);
-		
+		manager.getTransaction().begin();
+		manager.persist(usuario);		
 		manager.getTransaction().commit();
-		manager.close();
+		
 	}
 }

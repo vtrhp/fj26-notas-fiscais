@@ -36,9 +36,10 @@ public class LoginBean implements Serializable {
 		
 	}
 	
-	public void deslogar(){
-		
+	public void deslogar(Usuario usuario){
+		this.usuario = null;
 	}
+	
 	
 	public Usuario getUsuario(){
 		return this.usuario;

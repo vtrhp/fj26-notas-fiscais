@@ -5,6 +5,7 @@ package br.com.caelum.notasfiscais.mb;
 import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -15,6 +16,9 @@ import br.com.caelum.notasfiscais.modelo.Usuario;
 @RequestScoped
 public class LoginBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Inject
+	Event<Usuario> eventoLogin;
+	
 	@Inject
 	private UsuarioLogadoBean usuarioLogado;
 	
@@ -27,6 +31,7 @@ public class LoginBean implements Serializable {
 		boolean loginValido = dao.existe(this.usuario);
 		if(loginValido){
 			usuarioLogado.logar(usuario);
+			eventoLogin.fire(usuario);
 			return "produto?faces-redirect=true";
 		}else{
 			usuarioLogado.deslogar(usuario);

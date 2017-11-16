@@ -1,7 +1,8 @@
 package br.com.caelum.notasfiscais.mb;
 
 
-import javax.faces.view.ViewScoped;
+
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -10,9 +11,10 @@ import br.com.caelum.notasfiscais.dao.ProdutoDao;
 import br.com.caelum.notasfiscais.modelo.Item;
 import br.com.caelum.notasfiscais.modelo.NotaFiscal;
 import br.com.caelum.notasfiscais.modelo.Produto;
+import br.com.caelum.notasfiscais.tx.Transactional;
+import br.com.caelum.notasfiscais.tx.ViewModel;
 
-@Named
-@ViewScoped
+@ViewModel
 public class NotaFiscalBean {
 	private NotaFiscal notaFiscal = new NotaFiscal();
 	
@@ -20,19 +22,10 @@ public class NotaFiscalBean {
 	private Long idProduto;
 	
 	@Inject
-	private ProdutoDao produtoDao;
+	private ProdutoDao produtoDao;	
 	
-	public void guardaItem(){
-		Produto produto = produtoDao.buscaPorId(idProduto);
-		item.setProduto(produto);
-		item.setValorUnitario(produto.getPreco());
-		
-		notaFiscal.getItens().add(item);
-		item.setNotaFiscal(notaFiscal);
-		
-		item = new Item();
-		idProduto = null;
-	}
+	@Inject
+	private NotaFiscalDao notaFiscalDao;	
 	
 	
 	public Item getItem() {
@@ -70,10 +63,8 @@ public class NotaFiscalBean {
 	public void setNotaFiscal(NotaFiscal notaFiscal) {
 		this.notaFiscal = notaFiscal;
 	}
-
-	@Inject
-	private NotaFiscalDao notaFiscalDao;
 	
+	@Transactional
 	public void gravar(){
 		this.notaFiscalDao.adiciona(notaFiscal);
 		
@@ -82,6 +73,19 @@ public class NotaFiscalBean {
 	
 	public NotaFiscal getNotaFiscal(){
 		return notaFiscal;
+	}
+	
+
+	public void guardaItem(){
+		Produto produto = produtoDao.buscaPorId(idProduto);
+		item.setProduto(produto);
+		item.setValorUnitario(produto.getPreco());
+		
+		notaFiscal.getItens().add(item);
+		item.setNotaFiscal(notaFiscal);
+		
+		item = new Item();
+		idProduto = null;
 	}
 
 }

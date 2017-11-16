@@ -5,14 +5,16 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.caelum.notasfiscais.dao.ProdutoDao;
 import br.com.caelum.notasfiscais.modelo.Produto;
+import br.com.caelum.notasfiscais.tx.Transactional;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class ProdutoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -20,13 +22,13 @@ public class ProdutoBean implements Serializable {
 	@Inject
 	private ProdutoDao dao;
 	
-	/*public ProdutoDao getDao() {
+	public ProdutoDao getDao() {
 		return dao;
 	}
 
 	public void setDao(ProdutoDao dao) {
 		this.dao = dao;
-	}*/ //teste metodo remove
+	}
 
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
@@ -50,7 +52,7 @@ public class ProdutoBean implements Serializable {
 	public Produto getProduto(){
 		return this.produto;
 	}
-	
+	@Transactional
 	public String grava(){
 				
 		if(produto.getId() == null){
@@ -64,7 +66,7 @@ public class ProdutoBean implements Serializable {
 		return "produto?faces-redirect=true";
 		
 	}
-	
+	@Transactional
 	public void remove(Produto produto){				
 		this.dao.remove(produto);		
 		this.produtos = dao.listaTodos();				

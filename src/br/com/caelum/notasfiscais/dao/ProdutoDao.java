@@ -16,29 +16,21 @@ public class ProdutoDao implements Serializable{
 	@Inject
 	private EntityManager manager;	
 
-	public void adiciona(Produto produto) {
-		//persiste o objeto
-		manager.getTransaction().begin();
+	public void adiciona(Produto produto) {	
 		manager.persist(produto);	
-		manager.getTransaction().commit();
-
 	}
 
 
-	public void remove(Produto produto) {
-		manager.getTransaction().begin();
-		manager.remove(manager.merge(produto));
-		manager.getTransaction().commit();
+	public void remove(Produto produto) {		
+		manager.remove(manager.merge(produto));	
 	}
 
-	public void atualiza(Produto produto) {
-		manager.getTransaction().begin();
-		manager.merge(produto);		
-		manager.getTransaction().commit();
+	public void atualiza(Produto produto) {		
+		manager.merge(produto);			
 	}
 
 	public List<Produto> buscaPorNome(String nome) {	
-		manager.getTransaction().begin();
+		//manager.getTransaction().begin();
 		String jpql = "select p from Produto p where "
 				+ " lower(p.nome) like :nome order by p.nome";
 
@@ -49,7 +41,7 @@ public class ProdutoDao implements Serializable{
 	}
 
 	public List<Produto> listaTodos() {		
-		manager.getTransaction().begin();		
+		//manager.getTransaction().begin();		
 		CriteriaQuery<Produto> query = manager.getCriteriaBuilder().createQuery(Produto.class);
 		query.select(query.from(Produto.class));
 
@@ -59,7 +51,7 @@ public class ProdutoDao implements Serializable{
 	}
 	
 	public Produto buscaPorId(Long id) {		
-		manager.getTransaction().begin();
+		//manager.getTransaction().begin();
 		Produto produto = manager.find(Produto.class, id);
 		
 		return produto;
